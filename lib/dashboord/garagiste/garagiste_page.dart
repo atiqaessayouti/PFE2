@@ -1,152 +1,188 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import '../admin/StockPage.dart';
+import '../client/HistoriqueCommandesClientPage.dart';
+import '../client/HistoriqueEntretienClientPage.dart';
+import '../client/MesVehiculesPage.dart';
+import '../client/ProfilClientPage.dart';
+import '../client/catalogue_pieces_page.dart';
 import 'AjouterEntretienPage.dart';
+import 'HistoriqueEntretienGaragistePage.dart';
 
 class GaragistePage extends StatelessWidget {
   const GaragistePage({Key? key}) : super(key: key);
 
-  final Color primaryColor = Colors.orange;
+  // Palette de couleurs dégradé vert moderne
+  final Color primaryGreen = const Color(0xFF10B981);      // Vert moderne
+  final Color secondaryGreen = const Color(0xFF059669);    // Vert plus foncé
+  final Color accentGreen = const Color(0xFF047857);       // Vert accent
+  final Color lightGreen = const Color(0xFF6EE7B7);       // Vert clair
+  final Color darkGreen = const Color(0xFF064E3B);        // Vert très foncé
 
   @override
   Widget build(BuildContext context) {
-    final aujourdHui = DateTime.now();
-
     return Scaffold(
-      backgroundColor: Colors.grey[100],
+      backgroundColor: const Color(0xFF0F172A), // Fond sombre
       appBar: AppBar(
-        backgroundColor: primaryColor,
-        title: const Text("Tableau de Bord", style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text(
+            "Tableau de Bord Garagiste",
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.w700,
+            )
+        ),
         centerTitle: true,
+        flexibleSpace: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [primaryGreen, secondaryGreen, accentGreen],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              stops: const [0.0, 0.5, 1.0],
+            ),
+          ),
+        ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: primaryColor,
-        unselectedItemColor: Colors.grey,
-        currentIndex: 0,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Accueil'),
-          BottomNavigationBarItem(icon: Icon(Icons.directions_car), label: 'Véhicules'),
-          BottomNavigationBarItem(icon: Icon(Icons.build), label: 'Entretiens'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Pièces'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
-        ],
+
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              const Color(0xFF1E293B),
+              const Color(0xFF334155),
+            ],
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: primaryGreen.withOpacity(0.3),
+              blurRadius: 20,
+              offset: const Offset(0, -5),
+            ),
+          ],
+        ),
+        child: BottomNavigationBar(
+          currentIndex: 0,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: lightGreen,
+          unselectedItemColor: Colors.grey[400],
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.w700),
+          onTap: (index) {
+            if (index == 1) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => HistoriqueEntretienGaragistePage()),
+              );
+            }else if (index == 3) {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage()));
+            }
+            else if (index == 2) {
+              Navigator.push(context, MaterialPageRoute(builder: (_) => const ProfilClientPage()));
+            }
+          },
+          items: const [
+            BottomNavigationBarItem(icon: Icon(Icons.dashboard_rounded), label: 'Accueil'),
+            BottomNavigationBarItem(icon: Icon(Icons.build_rounded), label: 'Entretiens'),
+            BottomNavigationBarItem(icon: Icon(Icons.person_rounded), label: 'Profil'),
+            BottomNavigationBarItem(icon: Icon(Icons.inventory_rounded), label: 'Pièces'),
+
+          ],
+        ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12),
+
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance.collection('entretiens').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) return const SizedBox();
-
-                final allDocs = snapshot.data!.docs;
-                final aujourdHuiStr = "${aujourdHui.year}-${aujourdHui.month.toString().padLeft(2, '0')}-${aujourdHui.day.toString().padLeft(2, '0')}";
-
-                int today = 0;
-                int enCours = 0;
-                int aVenir = 0;
-
-                for (var doc in allDocs) {
-                  final date = doc['date'] ?? '';
-                  final statut = doc['statut'] ?? '';
-
-                  if (date == aujourdHuiStr) {
-                    today++;
-                    if (statut == 'En cours') enCours++;
-                    if (statut == 'À venir') aVenir++;
-                  }
-                }
-
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    buildDashboardCard("Entretiens", today, Colors.amber),
-                    buildDashboardCard("Commandes", 3, Colors.green),
-                    buildDashboardCard("Véhicules actifs", 28, Colors.grey),
+            // Section des actions rapides avec dégradé
+            Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    primaryGreen.withOpacity(0.1),
+                    secondaryGreen.withOpacity(0.05),
                   ],
-                );
-              },
-            ),
-
-            const SizedBox(height: 16),
-
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const AjouterEntretienPage()),
-                );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepOrange,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                ),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                  color: primaryGreen.withOpacity(0.3),
+                  width: 1,
+                ),
               ),
-              child: const Text("Planifier un entretien"),
-            ),
-            const SizedBox(height: 8),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orangeAccent,
-                foregroundColor: Colors.white,
-                minimumSize: const Size(double.infinity, 50),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-              ),
-              child: const Text("Commander des pièces"),
-            ),
-
-            const SizedBox(height: 16),
-            const Text("Entretiens du jour", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-
-            Expanded(
-              child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('entretiens')
-                    .where('date', isEqualTo: "${aujourdHui.year}-${aujourdHui.month.toString().padLeft(2, '0')}-${aujourdHui.day.toString().padLeft(2, '0')}")
-                    .orderBy('heure')
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  final docs = snapshot.data!.docs;
-
-                  if (docs.isEmpty) {
-                    return const Center(child: Text("Aucun entretien pour aujourd'hui."));
-                  }
-
-                  return ListView.builder(
-                    itemCount: docs.length,
-                    itemBuilder: (context, index) {
-                      final doc = docs[index];
-                      final vehicule = doc['vehicule'] ?? '';
-                      final client = doc['client'] ?? '';
-                      final service = doc['service'] ?? '';
-                      final heure = doc['heure'] ?? '';
-                      final statut = doc['statut'] ?? 'À venir';
-
-                      return EntretienCard(
-                        vehicule: vehicule,
-                        client: client,
-                        service: service,
-                        heure: heure,
-                        statut: statut,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-
-            Center(
-              child: TextButton(
-                onPressed: () {},
-                child: const Text("Voir tous les entretiens"),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [primaryGreen, lightGreen],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Icon(Icons.rocket_launch_rounded, color: Colors.white, size: 24),
+                      ),
+                      const SizedBox(width: 16),
+                      const Text(
+                        "Actions rapides",
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 24),
+                  GridView.count(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 16,
+                    mainAxisSpacing: 16,
+                    childAspectRatio: 1.6,
+                    children: [
+                      modernDarkActionButton(
+                        "Planifier un entretien",
+                        Icons.add_task_rounded,
+                        [primaryGreen, lightGreen],
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const AjouterEntretienGaragistePage())),
+                      ),
+                      modernDarkActionButton(
+                        "Commander des pièces",
+                        Icons.shopping_cart_rounded,
+                        [secondaryGreen, primaryGreen],
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage())),
+                      ),
+                      modernDarkActionButton(
+                        "Historique entretiens",
+                        Icons.history_rounded,
+                        [const Color(0xFF8B5CF6), const Color(0xFFA78BFA)],
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => const HistoriqueEntretienGaragistePage())),
+                      ),
+                      modernDarkActionButton(
+                        "Historique commandes",
+                        Icons.receipt_long_rounded,
+                        [const Color(0xFFF59E0B), const Color(0xFFFBBF24)],
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => HistoriqueCommandesClientPage())),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],
@@ -155,96 +191,54 @@ class GaragistePage extends StatelessWidget {
     );
   }
 
-  Widget buildDashboardCard(String title, int value, Color color) {
+  /// BOUTON D'ACTION MODERNE SOMBRE
+  Widget modernDarkActionButton(String title, IconData icon, List<Color> gradientColors, VoidCallback onPressed) {
     return Container(
-      width: 100,
       decoration: BoxDecoration(
-        color: color,
         borderRadius: BorderRadius.circular(16),
-      ),
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          Text(title, style: const TextStyle(color: Colors.white, fontSize: 14), textAlign: TextAlign.center),
-          const SizedBox(height: 6),
-          Text("$value", style: const TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold)),
+        boxShadow: [
+          BoxShadow(
+            color: gradientColors[0].withOpacity(0.3),
+            blurRadius: 20,
+            offset: const Offset(0, 8),
+          ),
         ],
       ),
-    );
-  }
-}
-
-class EntretienCard extends StatelessWidget {
-  final String vehicule;
-  final String client;
-  final String service;
-  final String heure;
-  final String statut;
-
-  const EntretienCard({
-    required this.vehicule,
-    required this.client,
-    required this.service,
-    required this.heure,
-    required this.statut,
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    Color getStatutColor(String statut) {
-      switch (statut) {
-        case 'Terminé':
-          return Colors.green;
-        case 'En cours':
-          return Colors.orange;
-        case 'À venir':
-        default:
-          return Colors.amber;
-      }
-    }
-
-    return Card(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              width: 10,
-              height: 10,
-              margin: const EdgeInsets.only(top: 6, right: 12),
-              decoration: BoxDecoration(
-                color: getStatutColor(statut),
-                shape: BoxShape.circle,
-              ),
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          padding: EdgeInsets.zero,
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: gradientColors,
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(vehicule, style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-                  const SizedBox(height: 4),
-                  Text("Client: $client"),
-                  Text(service),
-                  Text(heure),
-                ],
-              ),
-            ),
-            Column(
-              children: [
-                Chip(
-                  label: Text(statut, style: const TextStyle(color: Colors.white)),
-                  backgroundColor: getStatutColor(statut),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 32, color: Colors.white),
+              const SizedBox(height: 8),
+              Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 13,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
                 ),
-                TextButton(
-                  onPressed: () {},
-                  child: const Text("Détails"),
-                )
-              ],
-            )
-          ],
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

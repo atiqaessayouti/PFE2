@@ -7,29 +7,32 @@ environment:
   sdk: ^3.7.2
 
 dependencies:
+  http: ^0.13.6
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  flutter_spinkit: "^5.0.0"
+  flutter_spinkit: ^5.0.0
 
-  # ➡️ Ajout Firebase Core (obligatoire)
+  # Firebase
   firebase_core: ^2.24.2
   cloud_firestore: ^4.0.0
-
-  # ➡️ (optionnel) Firebase Auth pour tester la connexion utilisateur
   firebase_auth: ^4.18.1
-
-  # ➡️ Ajoutez le package intl pour le formatage des dates/nombres
-  intl: ^0.18.1
   firebase_storage: ^11.0.0
-  image_picker: ^1.0.0
+
+  # Image picker
+  image_picker: ^1.0.7
+
+  # Pour les dates, prix, etc.
+  intl: ^0.18.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^3.0.0
 
 flutter:
   uses-material-design: true
   generate: true
   assets:
     - images/moto.png
+
