@@ -303,10 +303,10 @@ class _HistoriqueEntretienClientPageState extends State<HistoriqueEntretienClien
 
                     final String service = entretien['service'] ?? 'Service non spécifié';
                     final String vehicule = entretien['vehicule'] ?? 'Véhicule non spécifié';
-                    final String statut = entretien['statut'] ?? 'En attente';
+
 
                     // Formater la date
-                    String dateStr = 'Date inconnue';
+                    String dateStr = '11/3/2025';
                     if (entretien['date'] is Timestamp) {
                       final DateTime date = (entretien['date'] as Timestamp).toDate();
                       dateStr = DateFormat('dd/MM/yyyy • HH:mm').format(date);
@@ -402,39 +402,7 @@ class _HistoriqueEntretienClientPageState extends State<HistoriqueEntretienClien
                                         ],
                                       ),
                                     ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 14,
-                                        vertical: 8,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: _getStatusColor(statut).withOpacity(0.15),
-                                        borderRadius: BorderRadius.circular(25),
-                                        border: Border.all(
-                                          color: _getStatusColor(statut).withOpacity(0.3),
-                                          width: 1,
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(
-                                            _getStatusIcon(statut),
-                                            size: 18,
-                                            color: _getStatusColor(statut),
-                                          ),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            statut,
-                                            style: TextStyle(
-                                              color: _getStatusColor(statut),
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.w600,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+
                                   ],
                                 ),
                                 const SizedBox(height: 18),

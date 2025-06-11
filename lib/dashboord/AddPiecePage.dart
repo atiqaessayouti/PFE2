@@ -283,7 +283,7 @@ class _AddPiecePageState extends State<AddPiecePage> {
                 controller: _prixClientController,
                 style: TextStyle(color: textLight),
                 decoration: InputDecoration(
-                  labelText: 'Prix Client (€)',
+                  labelText: 'Prix Client (DH)',
                   labelStyle: TextStyle(color: textSecondary),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade700),
@@ -301,7 +301,7 @@ class _AddPiecePageState extends State<AddPiecePage> {
                 controller: _prixGaragisteController,
                 style: TextStyle(color: textLight),
                 decoration: InputDecoration(
-                  labelText: 'Prix Garagiste (€)',
+                  labelText: 'Prix Garagiste (DH)',
                   labelStyle: TextStyle(color: textSecondary),
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey.shade700),

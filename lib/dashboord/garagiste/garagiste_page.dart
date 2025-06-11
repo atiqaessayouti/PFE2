@@ -7,6 +7,8 @@ import '../client/MesVehiculesPage.dart';
 import '../client/ProfilClientPage.dart';
 import '../client/catalogue_pieces_page.dart';
 import 'AjouterEntretienPage.dart';
+import 'DemandesEntretiensPage.dart';
+import 'GestionDemandesEntretiensPage.dart';
 import 'HistoriqueEntretienGaragistePage.dart';
 
 class GaragistePage extends StatelessWidget {
@@ -168,6 +170,13 @@ class GaragistePage extends StatelessWidget {
                         [secondaryGreen, primaryGreen],
                             () => Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage())),
                       ),
+                      modernDarkActionButton(
+                        "Gestion Demandes",
+                        Icons.pending_actions_rounded,
+                        [const Color(0xFF0EA5E9), const Color(0xFF38BDF8)],
+                            () => Navigator.push(context, MaterialPageRoute(builder: (_) => GestionDemandesEntretiensPage())),
+                      ),
+
                       modernDarkActionButton(
                         "Historique entretiens",
                         Icons.history_rounded,

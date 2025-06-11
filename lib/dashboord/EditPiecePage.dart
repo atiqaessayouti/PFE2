@@ -291,13 +291,13 @@ class _EditPiecePageState extends State<EditPiecePage> {
                 validator: (value) => value!.isEmpty ? 'Référence requise' : null,
               ),
               _buildTextField(
-                label: 'Prix Client (€)',
+                label: 'Prix Client (DH)',
                 controller: _prixClientController,
                 inputType: TextInputType.number,
                 validator: (value) => double.tryParse(value ?? '') == null ? 'Prix invalide' : null,
               ),
               _buildTextField(
-                label: 'Prix Garagiste (€)',
+                label: 'Prix Garagiste (DH)',
                 controller: _prixGaragisteController,
                 inputType: TextInputType.number,
                 validator: (value) => double.tryParse(value ?? '') == null ? 'Prix invalide' : null,

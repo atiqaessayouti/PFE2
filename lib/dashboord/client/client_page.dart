@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../admin/StockPage.dart';
 import 'AjoutEntretienClientPage.dart';
+import 'DemandeEntretienPage.dart';
+import 'SuiviEntretiensClientPage.dart';
 import 'HistoriqueCommandesClientPage.dart';
 import 'HistoriqueEntretienClientPage.dart';
 import 'MesVehiculesPage.dart';
@@ -452,6 +454,26 @@ class _ClientDashboardState extends State<ClientDashboard> with TickerProviderSt
           onTap: () => Navigator.push(
             context,
             MaterialPageRoute(builder: (_) => const AjouterEntretienClientPage()),
+          ),
+        ),
+        SizedBox(height: 16),
+        _buildActionCard(
+          title: "demander  un entretien",
+          subtitle: "Réservez un créneau pour votre véhicule",
+          icon: Icons.calendar_today_outlined,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => DemandeEntretienPage()),
+          ),
+        ),
+        SizedBox(height: 16),
+        _buildActionCard(
+          title: "Etat des Entrtiens",
+          subtitle: "Réservez un créneau pour votre véhicule",
+          icon: Icons.calendar_today_outlined,
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => SuiviEntretiensClientPage ()),
           ),
         ),
         SizedBox(height: 12),

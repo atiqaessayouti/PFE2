@@ -526,12 +526,12 @@ class _StockPageState extends State<StockPage> {
                                   const SizedBox(height: 8),
 
                                   if (isAdmin) ...[
-                                    _buildInfoRow(Icons.person, 'Prix Client', '${prixClient.toStringAsFixed(2)} €'),
-                                    _buildInfoRow(Icons.build, 'Prix Garagiste', '${prixGaragiste.toStringAsFixed(2)} €'),
+                                    _buildInfoRow(Icons.person, 'Prix Client', '${prixClient.toStringAsFixed(2)} DH'),
+                                    _buildInfoRow(Icons.build, 'Prix Garagiste', '${prixGaragiste.toStringAsFixed(2)} DH'),
                                     _buildInfoRow(Icons.inventory_2, 'Stock', '$stock unités',
                                         textColor: stock > 0 ? primaryGreen : primaryRed),
                                   ] else ...[
-                                    _buildInfoRow(Icons.euro, 'Prix', '${prixClient.toStringAsFixed(2)} €'),
+                                    _buildInfoRow(Icons.euro, 'Prix', '${prixClient.toStringAsFixed(2)} dh'),
                                   ],
 
                                   const SizedBox(height: 12),

@@ -225,7 +225,7 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                   builder: (context, snapshot) {
                     return _buildStatCard2(
                       title: "Véhicules",
-                      value: '${snapshot.data ?? 0}',
+                      value: '${snapshot.data ?? 10}',
                       icon: Icons.directions_car_rounded,
                       gradient: const [Color(0xFFA855F7), Color(0xFF7C2D92)],
                       onTap: () {
