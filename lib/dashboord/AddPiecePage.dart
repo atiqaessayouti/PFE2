@@ -30,8 +30,18 @@ class _AddPiecePageState extends State<AddPiecePage> {
   Uint8List? _webImage;
   bool _isUploading = false;
 
-  final List<String> marques = ['Peugeot', 'Renault', 'Volkswagen', 'Prisqued', 'Rensat', 'Vision', 'Toyota', 'Dacia'];
-  final List<String> modeles = ['308', 'Clio', 'Golf', '128', 'Ote', 'Prospect 512', 'Corolla', 'Sandero'];
+  // Mapping marques -> modèles compatibles
+  final Map<String, List<String>> marqueModeles = {
+    'Peugeot': ['308', '208', '2008', '207'],
+    'Renault': ['Clio',],
+
+    'Toyota': ['Corolla', 'Yaris'],
+    'Dacia': ['Sandero', 'Duster', 'Spring'],
+    'BMW': ['Serie 1', 'Serie 3',],
+    'Mercedes': ['Classe A', 'Classe C', 'Classe E'],
+
+  };
+
   final List<String> annees = ['2020', '2021', '2022', '2023'];
 
   List<String> selectedMarques = [];
@@ -45,6 +55,59 @@ class _AddPiecePageState extends State<AddPiecePage> {
   static const Color cardDark = Color(0xFF1E1E1E);
   static const Color textLight = Color(0xFFE0E0E0);
   static const Color textSecondary = Color(0xFF9E9E9E);
+
+  // Getter pour obtenir toutes les marques
+  List<String> get allMarques => marqueModeles.keys.toList();
+
+  // Getter pour obtenir tous les modèles
+  List<String> get allModeles {
+    Set<String> modeles = {};
+    marqueModeles.values.forEach((list) => modeles.addAll(list));
+    return modeles.toList();
+  }
+
+  // Getter pour obtenir les modèles filtrés selon les marques sélectionnées
+  List<String> get filteredModeles {
+    if (selectedMarques.isEmpty) {
+      return allModeles;
+    }
+
+    Set<String> compatibleModeles = {};
+    for (String marque in selectedMarques) {
+      if (marqueModeles.containsKey(marque)) {
+        compatibleModeles.addAll(marqueModeles[marque]!);
+      }
+    }
+    return compatibleModeles.toList();
+  }
+
+  // Getter pour obtenir les marques filtrées selon les modèles sélectionnés
+  List<String> get filteredMarques {
+    if (selectedModeles.isEmpty) {
+      return allMarques;
+    }
+
+    List<String> compatibleMarques = [];
+    for (String marque in allMarques) {
+      if (marqueModeles[marque]!.any((modele) => selectedModeles.contains(modele))) {
+        compatibleMarques.add(marque);
+      }
+    }
+    return compatibleMarques;
+  }
+
+  // Fonction pour nettoyer les sélections incompatibles
+  void _cleanIncompatibleSelections() {
+    // Nettoyer les modèles qui ne sont plus compatibles avec les marques sélectionnées
+    if (selectedMarques.isNotEmpty) {
+      selectedModeles.removeWhere((modele) => !filteredModeles.contains(modele));
+    }
+
+    // Nettoyer les marques qui ne sont plus compatibles avec les modèles sélectionnés
+    if (selectedModeles.isNotEmpty) {
+      selectedMarques.removeWhere((marque) => !filteredMarques.contains(marque));
+    }
+  }
 
   Future<void> _pickImage() async {
     final picker = ImagePicker();
@@ -154,6 +217,94 @@ class _AddPiecePageState extends State<AddPiecePage> {
     }
   }
 
+  Widget _buildMarqueSelect() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Marques compatibles', style: TextStyle(fontWeight: FontWeight.bold, color: textLight)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          children: filteredMarques.map((marque) {
+            final isSelected = selectedMarques.contains(marque);
+            final isFiltered = selectedModeles.isNotEmpty && !filteredMarques.contains(marque);
+
+            return FilterChip(
+              label: Text(
+                marque,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : (isFiltered ? textSecondary : textLight),
+                ),
+              ),
+              selected: isSelected,
+              onSelected: isFiltered ? null : (selected) {
+                setState(() {
+                  if (selected) {
+                    selectedMarques.add(marque);
+                  } else {
+                    selectedMarques.remove(marque);
+                  }
+                  _cleanIncompatibleSelections();
+                });
+              },
+              backgroundColor: isFiltered ? cardDark.withOpacity(0.5) : cardDark,
+              selectedColor: primaryBlue,
+              checkmarkColor: Colors.white,
+              side: BorderSide(
+                color: isFiltered ? Colors.grey.shade800 : Colors.grey.shade700,
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
+  Widget _buildModeleSelect() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('Modèles compatibles', style: TextStyle(fontWeight: FontWeight.bold, color: textLight)),
+        const SizedBox(height: 8),
+        Wrap(
+          spacing: 8,
+          children: filteredModeles.map((modele) {
+            final isSelected = selectedModeles.contains(modele);
+            final isFiltered = selectedMarques.isNotEmpty && !filteredModeles.contains(modele);
+
+            return FilterChip(
+              label: Text(
+                modele,
+                style: TextStyle(
+                  color: isSelected ? Colors.white : (isFiltered ? textSecondary : textLight),
+                ),
+              ),
+              selected: isSelected,
+              onSelected: isFiltered ? null : (selected) {
+                setState(() {
+                  if (selected) {
+                    selectedModeles.add(modele);
+                  } else {
+                    selectedModeles.remove(modele);
+                  }
+                  _cleanIncompatibleSelections();
+                });
+              },
+              backgroundColor: isFiltered ? cardDark.withOpacity(0.5) : cardDark,
+              selectedColor: primaryBlue,
+              checkmarkColor: Colors.white,
+              side: BorderSide(
+                color: isFiltered ? Colors.grey.shade800 : Colors.grey.shade700,
+              ),
+            );
+          }).toList(),
+        ),
+        const SizedBox(height: 16),
+      ],
+    );
+  }
+
   Widget _buildMultiSelect<T>(String label, List<T> options, List<T> selectedList, void Function(List<T>) onChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -209,6 +360,19 @@ class _AddPiecePageState extends State<AddPiecePage> {
             ),
           ),
         ),
+        actions: [
+          if (selectedMarques.isNotEmpty || selectedModeles.isNotEmpty)
+            IconButton(
+              icon: Icon(Icons.clear_all, color: textLight),
+              onPressed: () {
+                setState(() {
+                  selectedMarques.clear();
+                  selectedModeles.clear();
+                });
+              },
+              tooltip: 'Effacer toutes les sélections',
+            ),
+        ],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -350,15 +514,18 @@ class _AddPiecePageState extends State<AddPiecePage> {
                 ),
               ),
               const SizedBox(height: 12),
-              _buildMultiSelect('Marques compatibles', marques, selectedMarques, (value) {
-                selectedMarques = value;
-              }),
-              _buildMultiSelect('Modèles compatibles', modeles, selectedModeles, (value) {
-                selectedModeles = value;
-              }),
+
+              // Sélection des marques avec filtrage
+              _buildMarqueSelect(),
+
+              // Sélection des modèles avec filtrage
+              _buildModeleSelect(),
+
+              // Sélection des années (pas de filtrage)
               _buildMultiSelect('Années compatibles', annees, selectedAnnees, (value) {
                 selectedAnnees = value;
               }),
+
               const SizedBox(height: 24),
               _isUploading
                   ? CircularProgressIndicator(color: primaryBlue)

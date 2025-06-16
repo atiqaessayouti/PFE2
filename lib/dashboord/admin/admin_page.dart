@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:untitled1/dashboord/admin/HistoriqueCommandesPage.dart';
-import 'package:untitled1/dashboord/client/HistoriqueCommandesClientPage.dart';
+import 'package:SuiviAuto/dashboord/admin/HistoriqueCommandesPage.dart';
+import 'package:SuiviAuto/dashboord/client/HistoriqueCommandesClientPage.dart';
 import '../../LoginScreen.dart';
 import '../AddPiecePage.dart';
 import 'CommandesEnAttentePage.dart';
@@ -23,24 +23,19 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
   int _selectedIndex = 0;
   late AnimationController _animationController;
 
-  // Palette de couleurs sombres avec dégradés mauve et orange
-  static const Color primaryPurple = Color(0xFF6B46C1);
-  static const Color deepPurple = Color(0xFF4C1D95);
-  static const Color lightPurple = Color(0xFF8B5CF6);
-  static const Color primaryOrange = Color(0xFFEA580C);
-  static const Color deepOrange = Color(0xFFD97706);
-  static const Color lightOrange = Color(0xFFFF8A50);
-
-  static const Color darkBackground = Color(0xFF0F0F23);
-  static const Color cardDark = Color(0xFF1A1B3A);
-  static const Color surfaceDark = Color(0xFF252641);
-  static const Color accentDark = Color(0xFF2D2F48);
+  // Palette de couleurs professionnelle
+  static const Color primaryColor = Color(0xFF2A3F54);
+  static const Color secondaryColor = Color(0xFF1ABB9C);
+  static const Color accentColor = Color(0xFF3498DB);
+  static const Color darkBackground = Color(0xFF172D3A);
+  static const Color cardColor = Color(0xFF2A3F54);
+  static const Color textColor = Color(0xFFECF0F1);
 
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 800),
       vsync: this,
     );
     _animationController.forward();
@@ -68,23 +63,18 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
   Widget _buildDashboardContent() {
     return Container(
       decoration: const BoxDecoration(
-        gradient: RadialGradient(
-          center: Alignment.topLeft,
-          radius: 2.0,
-          colors: [
-            Color(0xFF1A1B3A),
-            darkBackground,
-            Color(0xFF0A0A1A),
-          ],
-          stops: [0.0, 0.5, 1.0],
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [darkBackground, primaryColor],
         ),
       ),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Header avec bienvenue amélioré - Style sombre
+            // Header avec bienvenue
             AnimatedBuilder(
               animation: _animationController,
               builder: (context, child) {
@@ -93,29 +83,16 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                   child: Opacity(
                     opacity: _animationController.value,
                     child: Container(
-                      padding: const EdgeInsets.all(28),
-                      margin: const EdgeInsets.only(bottom: 28),
+                      padding: const EdgeInsets.all(24),
+                      margin: const EdgeInsets.only(bottom: 24),
                       decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF6B46C1),
-                            Color(0xFF8B5CF6),
-                            Color(0xFFEA580C),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(24),
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
-                            color: primaryPurple.withOpacity(0.4),
-                            blurRadius: 25,
-                            offset: const Offset(0, 12),
-                          ),
-                          BoxShadow(
-                            color: primaryOrange.withOpacity(0.3),
-                            blurRadius: 20,
-                            offset: const Offset(8, 8),
+                            color: Colors.black.withOpacity(0.2),
+                            blurRadius: 10,
+                            offset: const Offset(0, 5),
                           ),
                         ],
                       ),
@@ -126,44 +103,35 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Bienvenue Admin 🚀',
-                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                  'Tableau de bord Admin',
+                                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                    shadows: [
-                                      Shadow(
-                                        blurRadius: 8,
-                                        color: Colors.black.withOpacity(0.3),
-                                        offset: const Offset(2, 2),
-                                      ),
-                                    ],
+                                    color: textColor,
                                   ),
                                 ),
-                                const SizedBox(height: 12),
+                                const SizedBox(height: 8),
                                 Text(
-                                  'Tableau de bord moderne - Gestion intelligente',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                    color: Colors.white.withOpacity(0.95),
-                                    fontWeight: FontWeight.w500,
+                                  'Gestion complète de votre application',
+                                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: textColor.withOpacity(0.8),
                                   ),
                                 ),
                               ],
                             ),
                           ),
                           Container(
-                            padding: const EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.15),
-                              borderRadius: BorderRadius.circular(20),
+                              color: secondaryColor.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
                               border: Border.all(
-                                color: Colors.white.withOpacity(0.2),
-                                width: 1,
+                                color: secondaryColor.withOpacity(0.3),
                               ),
                             ),
-                            child: const Icon(
-                              Icons.admin_panel_settings_rounded,
-                              color: Colors.white,
-                              size: 36,
+                            child: Icon(
+                              Icons.admin_panel_settings,
+                              color: textColor,
+                              size: 32,
                             ),
                           ),
                         ],
@@ -174,32 +142,31 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
               },
             ),
 
-            // Statistiques principales avec design sombre amélioré
+            // Statistiques principales
             Text(
-              'Analytics en Temps Réel',
+              'Statistiques',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 22,
+                color: textColor,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
             GridView.count(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               crossAxisCount: 2,
-              crossAxisSpacing: 18,
-              mainAxisSpacing: 18,
-              childAspectRatio: 1.0,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.1,
               children: [
                 StreamBuilder<int>(
                   stream: _countCollection('users'),
                   builder: (context, snapshot) {
-                    return _buildStatCard2(
+                    return _buildStatCard(
                       title: "Utilisateurs",
                       value: '${snapshot.data ?? 0}',
-                      icon: Icons.people_alt_rounded,
-                      gradient: const [Color(0xFF8B5CF6), Color(0xFF6B46C1)],
+                      icon: Icons.people,
+                      color: const Color(0xFF3498DB),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()));
                       },
@@ -209,11 +176,11 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                 StreamBuilder<int>(
                   stream: _countCollection('commandesPieces'),
                   builder: (context, snapshot) {
-                    return _buildStatCard2(
+                    return _buildStatCard(
                       title: "Commandes",
                       value: '${snapshot.data ?? 0}',
-                      icon: Icons.shopping_cart_rounded,
-                      gradient: const [Color(0xFFFF8A50), Color(0xFFEA580C)],
+                      icon: Icons.shopping_cart,
+                      color: const Color(0xFF9B59B6),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => HistoriqueCommandesAdminPage()));
                       },
@@ -223,11 +190,11 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                 StreamBuilder<int>(
                   stream: _countCollection('vehicule par client'),
                   builder: (context, snapshot) {
-                    return _buildStatCard2(
+                    return _buildStatCard(
                       title: "Véhicules",
                       value: '${snapshot.data ?? 10}',
-                      icon: Icons.directions_car_rounded,
-                      gradient: const [Color(0xFFA855F7), Color(0xFF7C2D92)],
+                      icon: Icons.directions_car,
+                      color: const Color(0xFFE74C3C),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => VehiculesParClientPage()));
                       },
@@ -237,216 +204,128 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
                 StreamBuilder<int>(
                   stream: _countCollection('piecesStock'),
                   builder: (context, snapshot) {
-                    return _buildStatCard2(
+                    return _buildStatCard(
                       title: "Pièces Stock",
                       value: '${snapshot.data ?? 0}',
-                      icon: Icons.handyman_rounded,
-                      gradient: const [Color(0xFFD97706), Color(0xFFB45309)],
+                      icon: Icons.inventory,
+                      color: const Color(0xFF1ABB9C),
                       onTap: () {
                         Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage()));
                       },
                     );
                   },
                 ),
-                StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('commandesPieces')
-                      .where('etat', isEqualTo: 'En attente')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    final nbCommandes = snapshot.data?.docs.length ?? 0;
-                    return _buildStatCard2(
-                      title: "En Attente",
-                      value: '$nbCommandes',
-                      icon: Icons.pending_actions_rounded,
-                      gradient: const [Color(0xFFEC4899), Color(0xFFBE185D)],
-                      onTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (_) => HistoriqueCommandesAdminPage()));
-                      },
-                    );
-                  },
-                ),
-
               ],
             ),
 
-            const SizedBox(height: 36),
+            const SizedBox(height: 24),
 
-            // Section Actions rapides améliorée - Style sombre
+            // Section Actions rapides
             Text(
-              'Actions Rapides',
+              'Actions rapides',
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 22,
+                color: textColor,
               ),
             ),
-            const SizedBox(height: 20),
-            Container(
-              padding: const EdgeInsets.all(24),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    cardDark.withOpacity(0.8),
-                    surfaceDark.withOpacity(0.6),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Colors.white.withOpacity(0.1),
-                  width: 1,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 20,
-                    offset: const Offset(0, 8),
-                  ),
-                ],
-              ),
-              child: Wrap(
-                spacing: 18,
-                runSpacing: 18,
-                children: [
-                  _buildQuickAction(
-                    icon: Icons.group_add_rounded,
-                    label: 'Gérer Utilisateurs',
-                    gradient: const [Color(0xFF8B5CF6), Color(0xFF6B46C1)],
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()));
-                    },
-                  ),
-                  _buildQuickAction(
-                    icon: Icons.inventory_rounded,
-                    label: 'Stock Pièces',
-                    gradient: const [Color(0xFFFF8A50), Color(0xFFEA580C)],
-                    onTap: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage()));
-                    },
-                  ),
-                  _buildQuickAction(
-                    icon: Icons.analytics_rounded,
-                    label: 'Analytics',
-                    gradient: const [Color(0xFFA855F7), Color(0xFF7C2D92)],
-                    onTap: () {
-                      // Naviguer vers la page des statistiques
-                    },
-                  ),
-                  _buildQuickAction(
-                    icon: Icons.settings_applications_rounded,
-                    label: 'Paramètres',
-                    gradient: const [Color(0xFFD97706), Color(0xFFB45309)],
-                    onTap: () {
-                      // Naviguer vers les paramètres
-                    },
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 36),
-
-            // Section Alertes améliorée - Style sombre
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            const SizedBox(height: 16),
+            GridView.count(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisCount: 2,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
+              childAspectRatio: 1.5,
               children: [
-                Text(
-                  'Alertes Système',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    fontSize: 22,
-                  ),
+                _buildQuickActionCard(
+                  icon: Icons.group_add,
+                  title: "Gérer utilisateurs",
+                  color: const Color(0xFF3498DB),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const UserManagementPage()));
+                  },
                 ),
-
+                _buildQuickActionCard(
+                  icon: Icons.inventory,
+                  title: "Gérer stock",
+                  color: const Color(0xFF1ABB9C),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => const StockPage()));
+                  },
+                ),
+                _buildQuickActionCard(
+                  icon: Icons.car_repair,
+                  title: "Véhicules clients",
+                  color: const Color(0xFFE74C3C),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (_) => VehiculesParClientPage()));
+                  },
+                ),
+                _buildQuickActionCard(
+                  icon: Icons.settings,
+                  title: "Paramètres",
+                  color: const Color(0xFF9B59B6),
+                  onTap: () {
+                    // Naviguer vers les paramètres
+                  },
+                ),
               ],
             ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 24),
+
+            // Section Alertes
             Container(
+              padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color(0xFFDC2626).withOpacity(0.2),
-                    const Color(0xFFEA580C).withOpacity(0.2),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-                borderRadius: BorderRadius.circular(20),
+                color: const Color(0xFFE74C3C).withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
                 border: Border.all(
-                  color: const Color(0xFFDC2626).withOpacity(0.3),
-                  width: 1.5,
+                  color: const Color(0xFFE74C3C).withOpacity(0.3),
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFDC2626).withOpacity(0.2),
-                    blurRadius: 15,
-                    offset: const Offset(0, 6),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFE74C3C).withOpacity(0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Icon(
+                      Icons.warning,
+                      color: Color(0xFFE74C3C),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Alertes système',
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: textColor,
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '3 articles en stock critique',
+                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: textColor.withOpacity(0.8),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.chevron_right, color: Colors.white),
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
+                    },
                   ),
                 ],
-              ),
-              child: InkWell(
-                borderRadius: BorderRadius.circular(20),
-                onTap: () {
-                  Navigator.push(context, MaterialPageRoute(builder: (_) => const NotificationsPage()));
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(24),
-                  child: Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFFDC2626), Color(0xFFEA580C)],
-                          ),
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFFDC2626).withOpacity(0.4),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(Icons.warning_amber_rounded, color: Colors.white, size: 28),
-                      ),
-                      const SizedBox(width: 20),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Stock Critique Détecté',
-                              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                fontSize: 16,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '3 articles sont en rupture ou niveau critique. Action immédiate requise.',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: Colors.white.withOpacity(0.9),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(12),
-                        decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.15),
-                          shape: BoxShape.circle,
-                        ),
-                        child: const Icon(Icons.chevron_right_rounded, color: Colors.white, size: 24),
-                      ),
-                    ],
-                  ),
-                ),
               ),
             ),
           ],
@@ -461,43 +340,22 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
       _buildDashboardContent(),
       const StockPage(),
       const UserManagementPage(),
-      const GaragisteApprovalPage(),
-      const Center(child: Text('Paramètres (à implémenter)', style: TextStyle(color: Colors.white))),
+
+      const Center(child: Text('Paramètres', style: TextStyle(color: Colors.white))),
     ];
 
     return Scaffold(
-      backgroundColor: darkBackground,
+      backgroundColor: primaryColor,
       appBar: AppBar(
         title: const Text(
-          'Admin Dashboard',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          'Tableau de bord Admin',
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                Color(0xFF6B46C1),
-                Color(0xFF8B5CF6),
-                Color(0xFFEA580C),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
+        backgroundColor: primaryColor,
         elevation: 0,
         actions: [
           IconButton(
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.3)),
-              ),
-              child: const Icon(Icons.notifications_active_rounded, color: Colors.white),
-            ),
-            tooltip: 'Notifications',
+            icon: const Icon(Icons.notifications),
             onPressed: () {
               Navigator.push(
                 context,
@@ -505,68 +363,136 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
               );
             },
           ),
-          const SizedBox(width: 8),
           IconButton(
-            icon: Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: Colors.white.withOpacity(0.3)),
-              ),
-              child: const Icon(Icons.logout_rounded, color: Colors.white),
-            ),
-            tooltip: 'Déconnexion',
+            icon: const Icon(Icons.logout),
             onPressed: () {
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (_) => LoginScreen()));
               _showLogoutDialog();
             },
           ),
-          const SizedBox(width: 8),
         ],
       ),
       body: pages[_selectedIndex],
-      bottomNavigationBar: Container(
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        backgroundColor: cardColor,
+        selectedItemColor: secondaryColor,
+        unselectedItemColor: textColor.withOpacity(0.6),
+        type: BottomNavigationBarType.fixed,
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard),
+            label: 'Dashboard',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.inventory),
+            label: 'Stock',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            label: 'Utilisateurs',
+          ),
+
+        ],
+      ),
+    );
+  }
+
+  Widget _buildStatCard({
+    required String title,
+    required String value,
+    required IconData icon,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              cardDark.withOpacity(0.95),
-              surfaceDark.withOpacity(0.95),
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(28),
-            topRight: Radius.circular(28),
-          ),
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.4),
-              blurRadius: 25,
-              offset: const Offset(0, -8),
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
             ),
           ],
-          border: Border.all(
-            color: Colors.white.withOpacity(0.1),
-            width: 1,
-          ),
         ),
-        child: BottomAppBar(
-          height: 70,
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-          color: Colors.transparent,
-          elevation: 0,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _buildBottomNavItem(Icons.dashboard_rounded, 'Dashboard', 0),
-              _buildBottomNavItem(Icons.inventory_2_rounded, 'Stock', 1),
-              _buildBottomNavItem(Icons.people_alt_rounded, 'Utilisateurs', 2),
-              _buildBottomNavItem(Icons.settings_rounded, 'Paramètres', 4),
-            ],
-          ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              value,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                color: textColor.withOpacity(0.8),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildQuickActionCard({
+    required IconData icon,
+    required String title,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(12),
+      child: Container(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 6,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Icon(icon, color: color),
+            ),
+            const SizedBox(width: 16),
+            Text(
+              title,
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                color: textColor,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -577,34 +503,34 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: cardDark,
+          backgroundColor: cardColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(12),
           ),
           title: const Text(
             'Déconnexion',
             style: TextStyle(
-              color: Colors.white,
+              color: textColor,
               fontWeight: FontWeight.bold,
             ),
           ),
           content: const Text(
             'Êtes-vous sûr de vouloir vous déconnecter ?',
-            style: TextStyle(color: Colors.white70),
+            style: TextStyle(color: textColor),
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text(
                 'Annuler',
-                style: TextStyle(color: lightPurple),
+                style: TextStyle(color: textColor),
               ),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: primaryOrange,
+                backgroundColor: secondaryColor,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
               onPressed: () {
@@ -620,206 +546,6 @@ class _AdminDashboardState extends State<AdminDashboard> with TickerProviderStat
           ],
         );
       },
-    );
-  }
-
-  Widget _buildBottomNavItem(IconData icon, String label, int index) {
-    final isSelected = _selectedIndex == index;
-    return InkWell(
-      onTap: () => _onItemTapped(index),
-      borderRadius: BorderRadius.circular(20),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 300),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), // Reduced padding
-        decoration: BoxDecoration(
-          gradient: isSelected
-              ? const LinearGradient(
-            colors: [Color(0xFF8B5CF6), Color(0xFFEA580C)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          )
-              : null,
-          borderRadius: BorderRadius.circular(20),
-          border: isSelected ? Border.all(color: Colors.white.withOpacity(0.3)) : null,
-          boxShadow: isSelected
-              ? [
-            BoxShadow(
-              color: primaryPurple.withOpacity(0.3),
-              blurRadius: 12,
-              offset: const Offset(0, 4),
-            ),
-          ]
-              : null,
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              icon,
-              color: isSelected ? Colors.white : Colors.grey.shade400,
-              size: 20, // Reduced icon size
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                fontSize: 10, // Smaller font size
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                color: isSelected ? Colors.white : Colors.grey.shade400,
-              ),
-              maxLines: 1, // Ensure text doesn't wrap
-              overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-  Widget _buildStatCard2({
-    required String title,
-    required String value,
-    required IconData icon,
-    required List<Color> gradient,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              cardDark.withOpacity(0.8),
-              surfaceDark.withOpacity(0.6),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: Colors.white.withOpacity(0.1),
-            width: 1,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: gradient[0].withOpacity(0.3),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 15,
-              offset: const Offset(0, 4),
-            ),
-          ],
-        ),
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: gradient),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient[0].withOpacity(0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Icon(icon, color: Colors.white, size: 28),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              value,
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontSize: 28,
-              ),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              title,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Colors.grey[300],
-                fontWeight: FontWeight.w600,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildQuickAction({
-    required IconData icon,
-    required String label,
-    required List<Color> gradient,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(20),
-      onTap: onTap,
-      child: Container(
-        width: 150,
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              accentDark.withOpacity(0.6),
-              surfaceDark.withOpacity(0.4),
-            ],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.white.withOpacity(0.15)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 15,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(colors: gradient),
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                    color: gradient[0].withOpacity(0.4),
-                    blurRadius: 12,
-                    offset: const Offset(0, 6),
-                  ),
-                ],
-              ),
-              child: Icon(icon, color: Colors.white, size: 28),
-            ),
-            const SizedBox(height: 16),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

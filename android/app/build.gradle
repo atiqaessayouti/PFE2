@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.untitled1"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "27.0.12077973" // ← CORRECT ici !
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -21,7 +21,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.untitled1"
-        minSdk = flutter.minSdkVersion
+        minSdk = 23 // ← TRÈS IMPORTANT POUR firebase-auth
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -29,7 +29,7 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("debug") // à changer plus tard pour la release
+            signingConfig = signingConfigs.getByName("debug") // à remplacer pour la prod
         }
     }
 }
@@ -42,9 +42,7 @@ dependencies {
     // Plateforme Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
 
-    // Dépendances Firebase que tu veux utiliser
-    // Par exemple :
+    // Exemple de dépendances Firebase (décommente si nécessaires)
     // implementation("com.google.firebase:firebase-analytics-ktx")
     // implementation("com.google.firebase:firebase-auth-ktx")
 }
-

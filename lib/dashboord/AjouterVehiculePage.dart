@@ -19,22 +19,35 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
   String? _nouveauVehiculeNom;
 
   // Couleurs thème sombre bleu-vert
-  final primaryColor = const Color(0xFF00796B); // Teal foncé
-  final accentColor = const Color(0xFF26C6DA); // Cyan
-  final secondaryColor = const Color(0xFF0277BD); // Bleu profond
-  final backgroundColor = const Color(0xFF121212); // Noir très foncé
-  final surfaceColor = const Color(0xFF1E1E1E); // Gris très foncé
-  final cardColor = const Color(0xFF2D2D2D); // Gris foncé
-  final textPrimaryColor = const Color(0xFFE0E0E0); // Blanc cassé
-  final textSecondaryColor = const Color(0xFFB0B0B0); // Gris clair
+  final primaryColor = const Color(0xFF00796B);
+  final accentColor = const Color(0xFF26C6DA);
+  final secondaryColor = const Color(0xFF0277BD);
+  final backgroundColor = const Color(0xFF121212);
+  final surfaceColor = const Color(0xFF1E1E1E);
+  final cardColor = const Color(0xFF2D2D2D);
+  final textPrimaryColor = const Color(0xFFE0E0E0);
+  final textSecondaryColor = const Color(0xFFB0B0B0);
 
   String? _marque, _modele, _annee, _immatriculation, _imageUrl;
   int? _kilometrage;
   File? _imageFile;
 
-  final marques = ['Peugeot', 'Renault', 'Volkswagen', 'Toyota', 'Dacia'];
-  final modeles = ['308', 'Clio', 'Golf', 'Corolla', 'Sandero'];
-  final annees = ['2020', '2021', '2022', '2023', '2024'];
+  // Structure de données organisée par marque avec leurs modèles correspondants
+  final Map<String, List<String>> marquesModeles = {
+    'Peugeot': ['308', '208', '2008', '207'],
+    'Renault': ['Clio',],
+
+    'Toyota': ['Corolla', 'Yaris'],
+    'Dacia': ['Sandero', 'Duster', 'Spring'],
+    'BMW': ['Serie 1', 'Serie 3',],
+    'Mercedes': ['Classe A', 'Classe C', 'Classe E'],
+
+  };
+
+  final List<String> annees = ['2020', '2021', '2022', '2023'];
+
+  // Liste des modèles disponibles selon la marque sélectionnée
+  List<String> modelesDisponibles = [];
 
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
@@ -62,6 +75,32 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
   void dispose() {
     _animationController.dispose();
     super.dispose();
+  }
+
+  // Méthode pour mettre à jour les modèles selon la marque sélectionnée
+  void _onMarqueChanged(String? marque) {
+    setState(() {
+      _marque = marque;
+      _modele = null; // Réinitialiser le modèle
+      if (marque != null && marquesModeles.containsKey(marque)) {
+        modelesDisponibles = marquesModeles[marque]!;
+      } else {
+        modelesDisponibles = [];
+      }
+    });
+  }
+
+  // Validation des données avant l'envoi
+  bool _isValidVehicle() {
+    if (_marque == null || _modele == null) return false;
+
+    // Vérifier que le modèle correspond bien à la marque
+    if (!marquesModeles.containsKey(_marque!) ||
+        !marquesModeles[_marque!]!.contains(_modele!)) {
+      return false;
+    }
+
+    return true;
   }
 
   Future<void> _pickerImage() async {
@@ -98,6 +137,25 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
   Future<void> _ajouterVehicule() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+
+      // Validation supplémentaire pour la cohérence marque/modèle
+      if (!_isValidVehicle()) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Row(
+              children: [
+                const Icon(Icons.warning, color: Colors.white),
+                const SizedBox(width: 8),
+                const Expanded(child: Text('Combinaison marque/modèle invalide')),
+              ],
+            ),
+            backgroundColor: Colors.orange.shade700,
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
+        return;
+      }
 
       setState(() {
         _isLoading = true;
@@ -324,14 +382,34 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
             _buildFormField(
               'Marque',
               Icons.car_repair,
-              _buildDropdown(marques, (val) => _marque = val, 'Choisissez une marque'),
+              _buildDropdown(
+                  marquesModeles.keys.toList(),
+                  _onMarqueChanged,
+                  'Choisissez une marque'
+              ),
             ),
             const SizedBox(height: 16),
             _buildFormField(
               'Modèle',
               Icons.model_training,
-              _buildDropdown(modeles, (val) => _modele = val, 'Choisissez un modèle'),
+              _buildDropdown(
+                  modelesDisponibles,
+                      (val) => _modele = val,
+                  'Choisissez d\'abord une marque',
+                  enabled: _marque != null
+              ),
             ),
+            if (_marque != null && modelesDisponibles.isEmpty)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  'Aucun modèle disponible pour cette marque',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
             const SizedBox(height: 16),
             _buildFormField(
               'Année',
@@ -779,7 +857,7 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
     );
   }
 
-  Widget _buildDropdown(List<String> items, void Function(String?) onChanged, String validatorText) {
+  Widget _buildDropdown(List<String> items, void Function(String?) onChanged, String validatorText, {bool enabled = true}) {
     return DropdownButtonFormField<String>(
       items: items.map((item) => DropdownMenuItem(
         value: item,
@@ -788,15 +866,17 @@ class _AjouterVehiculePageState extends State<AjouterVehiculePage>
           style: TextStyle(color: textPrimaryColor),
         ),
       )).toList(),
-      onChanged: onChanged,
-      decoration: const InputDecoration(
+      onChanged: enabled ? onChanged : null,
+      decoration: InputDecoration(
         border: InputBorder.none,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        hintText: enabled ? null : validatorText,
+        hintStyle: TextStyle(color: textSecondaryColor),
       ),
       validator: (val) => val == null ? validatorText : null,
       dropdownColor: surfaceColor,
-      style: TextStyle(color: textPrimaryColor),
-      iconEnabledColor: accentColor,
+      style: TextStyle(color: enabled ? textPrimaryColor : textSecondaryColor),
+      iconEnabledColor: enabled ? accentColor : textSecondaryColor,
     );
   }
 
