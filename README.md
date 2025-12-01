@@ -19,7 +19,10 @@ Le projet offre une interface intuitive et un système de rôles pour garantir u
 - **Firebase Firestore** — base de données cloud en temps réel  
 - **Firebase Authentication** — gestion sécurisée des utilisateurs  
 - **Git / GitHub** — gestion du versionning de code  
+## 🎥 Vidéo de démonstration
 
+Vous pouvez télécharger ou visionner la vidéo de démonstration ici :  
+[👉 Voir la vidéo](prj.mp4)
 ## Installation & Lancement (pour développement)  
 
 ```bash
@@ -28,10 +31,7 @@ git clone https://github.com/atiqaessayouti/PFE2.git
 
 # 2. Naviguer dans le dossier du projet
 cd PFE2
-## 🎥 Vidéo de démonstration
 
-Vous pouvez télécharger ou visionner la vidéo de démonstration ici :  
-[👉 Voir la vidéo](prj.mp4)
 
 # 3. Installer les dépendances Flutter
 flutter pub get
