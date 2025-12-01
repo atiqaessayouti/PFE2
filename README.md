@@ -1,16 +1,41 @@
-# untitled1
+# Application mobile – Gestion de maintenance de véhicules 🚗🛠️
 
-A new Flutter project.
+## Description  
+Cette application mobile, développée avec **Flutter** et **Firebase**, vise à faciliter la gestion de la maintenance des véhicules. Elle permet aux utilisateurs (administrateurs, clients ou garagistes) de suivre l’état des véhicules, planifier les entretiens et garder un historique clair des opérations.  
 
-## Getting Started
+Le projet offre une interface intuitive et un système de rôles pour garantir une gestion sécurisée et adaptée aux différents profils d’utilisateurs.
 
-This project is a starting point for a Flutter application.
+## Fonctionnalités principales  
+- ✅ Gestion des véhicules : ajout, modification, suppression  
+- ✅ Authentification sécurisée via Firebase Authentication  
+- ✅ Stockage et synchronisation des données en temps réel via Firestore  
+- ✅ Système de rôles utilisateur : Admin / Client / Garagiste  
+- ✅ Suivi des opérations de maintenance : historique, dates, détails  
+- ✅ Notifications pour rappels d’entretien  
+- ✅ Interface multiplateforme (Android / iOS / Web) grâce à Flutter  
 
-A few resources to get you started if this is your first Flutter project:
+## Technologies utilisées  
+- **Dart & Flutter** — pour le développement mobile multiplateforme  
+- **Firebase Firestore** — base de données cloud en temps réel  
+- **Firebase Authentication** — gestion sécurisée des utilisateurs  
+- **Git / GitHub** — gestion du versionning de code  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+## Installation & Lancement (pour développement)  
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+# 1. Cloner le dépôt
+git clone https://github.com/atiqaessayouti/PFE2.git
+
+# 2. Naviguer dans le dossier du projet
+cd PFE2
+
+# 3. Installer les dépendances Flutter
+flutter pub get
+
+# 4. Configurer Firebase 
+#    - Crée ton projet Firebase
+#    - Ajoute les fichiers de configuration (google-services.json / GoogleService-Info.plist)
+#    - Active Authentication + Firestore
+
+# 5. Lancer l’app
+flutter run
