@@ -42,7 +42,10 @@ flutter pub get
 #    - Active Authentication + Firestore
 ## 🎥 Video Demo
 
-./demo.mp4
+
+
+https://github.com/user-attachments/assets/89dcf8d6-fb97-44b2-a50f-253e79d05bdc
+
 
 # 5. Lancer l’app
 flutter run
