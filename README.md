@@ -44,11 +44,7 @@ flutter pub get
 #    - Crée ton projet Firebase
 #    - Ajoute les fichiers de configuration (google-services.json / GoogleService-Info.plist)
 #    - Active Authentication + Firestore
-## 🎥 Video Demo
 
-
-
-https://github.com/user-attachments/assets/89dcf8d6-fb97-44b2-a50f-253e79d05bdc
 
 
 # 5. Lancer l’app
