@@ -22,7 +22,11 @@ Le projet offre une interface intuitive et un système de rôles pour garantir u
 ## 🎥 Vidéo de démonstration
 
 Vous pouvez télécharger ou visionner la vidéo de démonstration ici :  
-[👉 Voir la vidéo](prj.mp4)
+
+
+https://github.com/user-attachments/assets/fa9bbab7-4a5a-4d84-8f86-a3089225f996
+
+
 ## Installation & Lancement (pour développement)  
 
 ```bash
