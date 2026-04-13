@@ -18,7 +18,23 @@ Le projet offre une interface intuitive et un système de rôles pour garantir u
 - **Dart & Flutter** — pour le développement mobile multiplateforme  
 - **Firebase Firestore** — base de données cloud en temps réel  
 - **Firebase Authentication** — gestion sécurisée des utilisateurs  
-- **Git / GitHub** — gestion du versionning de code  
+- **Git / GitHub** — gestion du versionning de code
+- ## 📊 Diagrammes UML
+
+### 🔹 Diagramme de cas d'utilisation (Use Case)
+
+Ce diagramme représente les interactions entre les différents acteurs (Admin, Client, Garagiste) et le système.
+
+<img width="533" height="323" alt="Capture d’écran 2026-04-13 110918" src="https://github.com/user-attachments/assets/171e7683-5e56-4361-b864-22ec90d0ce13" />
+
+
+---
+
+### 🔹 Diagramme de classes
+
+Ce diagramme illustre la structure du système, incluant les classes principales comme User, Vehicule, Maintenance, et leurs relations.
+
+<img width="533" height="323" alt="Capture d’écran 2026-04-13 110918" src="https://github.com/user-attachments/assets/90ee7eb7-58de-4903-995d-b2620bc6a318" />
 ## 🎥 Vidéo de démonstration
 
 Vous pouvez télécharger ou visionner la vidéo de démonstration ici :  
